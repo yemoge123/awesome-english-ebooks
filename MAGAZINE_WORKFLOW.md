@@ -230,3 +230,15 @@ GitHub is the authority for executable/version-controlled material only: Android
 Google Drive is the canonical authority for translation runtime data: GT batch manifests and working state, source-recovery records, translated article bodies, QA payloads, EPUB/HTML ZIP reading packages, images, checkpoints, and superseded runtime artifacts.
 
 Do not commit GT-xxx runtime payloads back into Git. For reproducibility, each Drive batch should retain the relevant repository HEAD or code/profile blob/commit SHA together with source EPUB path/SHA identity.
+
+
+## Google Drive target identity
+
+For persistence and final-reader delivery, prefer stable Google Drive IDs over path-name lookup.
+
+- `AI周期检索资料`: `1Uk35QUG4IUxrkHSx_g9xfXOH54g3abZV`
+- `20_Weekly`: `1kZx08i_9dzxz71iu2TrfujgZx2TkAz1a`
+- `China_News_Archive`: `1p8bG3Bq53Md66REL3JotJzIS14SBvlkO`
+- `02_Chinese_Reader`: `1x8iY_rTXIbd17RfG1FPwKZXeENQkgllv`
+
+Do not create a new folder because a human-facing name changes. Resolve by id, write in place, then verify the final EPUB parent id. The final-reader folder remains the stable delivery target; human navigation documents may be renamed without changing pipeline behavior.
