@@ -160,6 +160,17 @@ may be written as a recovery aid; that checkpoint is optional for a single unint
 
 Do not rely on a three-day GitHub artifact as the only durable copy after publication.
 
+
+### Source-materialization evidence
+
+For scheduled fresh runs, source-byte materialization is an Automation-runtime responsibility. A foreground chat/connector limitation is not a source-freshness or source-availability failure.
+
+After every successful Automation-runtime materialization, persist a transport receipt alongside provenance with at least: transport class/name, execution surface, mirror repo/ref/path, expected/actual byte size, expected/actual Git blob SHA, verification verdict, extractor/importer path, and embedded-image-binary retention status. Ephemeral signed URLs and credentials must never be persisted.
+
+If the runtime's concrete transport implementation is internal or opaque, persist that limitation explicitly together with the verifiable input/output evidence. This prevents a future run from treating an unexplained transport label as a reproducible implementation.
+
+Only an attempted and failed Automation-runtime materialization may set `RUNTIME_SOURCE_MATERIALIZATION_FAILED`. Do not ask the user to upload the issue merely because the foreground chat connector cannot stream large binary files.
+
 ## 11. Source freshness gate
 
 `latest successful artifact` is not automatically `CURRENT_VALID_SOURCE`.
