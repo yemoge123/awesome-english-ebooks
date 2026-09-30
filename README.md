@@ -11,8 +11,8 @@
 
 ## 二、内容分类
 
-* [经济学人 - 周刊, 点击这里下载最新一期](01_economist/te_2026.08.15) , 每周五十一点更新
-* [纽约客 - 周刊, 点击这里下载最新一期](02_new_yorker/2026.08.17) , 每周六上午更新
+* [经济学人 - 周刊, 点击这里下载最新一期](01_economist/te_2026.09.26) , 每周五十一点更新
+* [纽约客 - 周刊, 点击这里下载最新一期](02_new_yorker/2026.09.28) , 每周六上午更新
 * [The Atlantic - 月刊](04_atlantic), 每月2号更新
 * [Wired - 月刊](05_wired), 每月2号更新
 
@@ -31,12 +31,17 @@
 
 
 -------------------------------------
-## 周期杂志翻译控制面
+## 周期杂志翻译控制面（个人镜像）
 
-本仓库同时是个人周期外刊翻译使用的**授权杂志源镜像与 GitHub 控制面**。上游 `hehonghui/awesome-english-ebooks` 仅作为镜像 provenance；周期翻译任务不得再从 `yemoge123/RssReader` 读取策略、脚本、授权策略或 workflow。
+本 fork 同时作为个人周期外刊翻译的**授权杂志源镜像与 GitHub 控制面**。
+
+- Canonical repository: `yemoge123/awesome-english-ebooks`
+- Upstream `hehonghui/awesome-english-ebooks`：仅作为 fork/mirror provenance 与同步来源，不是周期任务的直接执行控制面。
+- `yemoge123/RssReader`：独立 Android 阅读器，不参与周期杂志翻译执行。
+- Google Drive：保存周运行的持久化状态、QA、EPUB/HTML 与恢复数据；不是 fresh weekly run 的 GitHub 规则/代码权威。
 
 Canonical files:
-
+- `PERIODIC_MAGAZINE_TASK.md`
 - `MAGAZINE_TRANSLATION_STRATEGY.md`
 - `MAGAZINE_TRANSLATION_PROFILE.md`
 - `MAGAZINE_WORKFLOW.md`
@@ -44,5 +49,3 @@ Canonical files:
 - `scripts/magazine_epub_extract.py`
 - `scripts/magazine_local_epub_import.py`
 - `scripts/magazine_translation_pipeline.py`
-
-运行时翻译正文、QA、checkpoint 与最终 EPUB/HTML 仍持久化到 Google Drive；本仓库不保存周运行时数据。RssReader 仅是独立 Android 阅读器，不参与周期杂志翻译执行。
