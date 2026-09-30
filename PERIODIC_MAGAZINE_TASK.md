@@ -73,6 +73,33 @@ For every issue used, persist:
 
 The upstream repository identity may be retained as provenance metadata, but it is not an execution dependency.
 
+## Automation source-materialization contract
+
+For fresh weekly execution, large EPUB binary transport belongs to the **automation execution runtime**, not to the foreground chat connector.
+
+Hard rules:
+
+- A foreground/chat GitHub connector being unable to return large binary bytes is **not** evidence that the production weekly source gate failed.
+- When path / byte size / Git blob SHA are visible but the binary payload is not, the weekly Automation must use its available non-Actions source-materialization path to place the exact mirror bytes into the current execution workspace.
+- The user must not be asked to manually upload the EPUB, and Google Drive must not be introduced as a mandatory pre-extraction staging hop.
+- After materialization, verify `actual_size == expected_size` and `actual_git_blob_sha == expected_git_blob_sha` before extraction. A mismatch is a hard source failure.
+- A true production blocker may be declared only after the **automation execution runtime** itself attempts the authorized materialization path and fails. Use `RUNTIME_SOURCE_MATERIALIZATION_FAILED`; do not infer this state from a foreground chat limitation.
+- Do not use GitHub Actions while the current Actions-usage restriction remains in force.
+
+Every successful materialization must persist a **transport receipt** in current-run provenance and final Drive control/source state. The receipt must include:
+
+- `transport` / transport class used by the runtime;
+- execution surface (`automation_runtime`);
+- mirror repository, ref/commit and repo path;
+- expected and actual byte size;
+- expected and actual Git blob SHA;
+- verification verdict;
+- extractor/importer path used after materialization;
+- whether embedded source image binaries were retained;
+- run timestamp / ISO week.
+
+Do **not** persist signed download URLs, cookies, tokens, credentials or other ephemeral secrets. If the runtime uses an internal/opaque transport implementation, record that fact plus the verifiable inputs/outputs above; do not reduce the receipt to an unexplained label only.
+
 ## Reuse and freshness
 
 Apply the rules in `MAGAZINE_TRANSLATION_STRATEGY.md`:
