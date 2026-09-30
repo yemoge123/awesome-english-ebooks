@@ -92,6 +92,7 @@ def test_pipeline():
         assert report["summary"]["pass"] == 1
         assert report["summary"]["fail"] == 0
         assert mod.paragraph_role("作者：David Owen", 2) == "front"
+        assert mod.paragraph_role("摄影：某某；编辑：某某", 6) == "front"
         assert mod.paragraph_role("摄影：某某；随后正文开始并继续很长很长很长很长很长很长很长很长很长很长很长很长很长很长。", 6) == "body"
         assert mod.paragraph_role("这是普通中文正文段落。", 6) == "body"
         refreshed = mod.load_json(workspace / "translation_manifest.json")
