@@ -1,1 +1,1 @@
-new_yorker=2026-09-14,economist=2026-09-12
+economist=2026-09-12,new_yorker=2026-09-14
