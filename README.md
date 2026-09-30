@@ -41,6 +41,7 @@
 - Google Drive：保存周运行的持久化状态、QA、EPUB/HTML 与恢复数据；不是 fresh weekly run 的 GitHub 规则/代码权威。
 
 Canonical files:
+- `MIRROR_SYNC_POLICY.md`
 - `PERIODIC_MAGAZINE_TASK.md`
 - `MAGAZINE_TRANSLATION_STRATEGY.md`
 - `MAGAZINE_TRANSLATION_PROFILE.md`
