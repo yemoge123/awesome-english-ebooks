@@ -95,6 +95,24 @@ python scripts/magazine_translation_pipeline.py next-batch \
 The next batch is derived from the persisted manifest and QA state, so a new chat/window can resume without replaying completed articles.
 
 
+## Automation-runtime EPUB materialization (primary fresh-run path)
+
+For the scheduled weekly controller, the primary fresh-run path is the Automation execution workspace.
+
+When the authorized mirror exposes the current issue path, byte size and Git blob SHA but the ordinary foreground GitHub connector cannot return the large EPUB binary:
+
+1. materialize the exact EPUB bytes from `yemoge123/awesome-english-ebooks` into the Automation execution workspace using the runtime's available non-Actions transport;
+2. compute actual byte size and canonical Git blob SHA locally;
+3. require exact equality with the mirror metadata;
+4. only then run the existing EPUB extractor/importer and Stage A/B pipeline;
+5. persist the transport receipt with the weekly runtime provenance.
+
+A foreground-chat inability to download the EPUB must not be promoted to a weekly production blocker. Only an Automation-runtime materialization attempt can produce `RUNTIME_SOURCE_MATERIALIZATION_FAILED`.
+
+The transport receipt must retain enough evidence to diagnose/reproduce the route without storing credentials: runtime surface, transport class/name, source repository/ref/path, expected+actual size, expected+actual Git blob SHA, verification, post-materialization extractor/importer path, and embedded-image-binary retention status.
+
+Do not ask the user for a manual upload and do not make Drive an online source-staging dependency merely because the foreground chat connector cannot stream the binary.
+
 ## Verified local EPUB fallback (non-Actions)
 
 When the current authorized EPUB bytes are already available locally, from Google Drive, or from a conversation upload, use the verified local import path instead of GitHub Actions.
