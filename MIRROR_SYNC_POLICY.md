@@ -1,75 +1,94 @@
 # Mirror Sync Policy
 
-Status: canonical  
+Status: canonical
 Effective: 2026-09-30
+Repository: `yemoge123/awesome-english-ebooks`
+Branch: `master`
 
 ## Purpose
 
-Keep `yemoge123/awesome-english-ebooks` current with its GitHub fork parent `hehonghui/awesome-english-ebooks` while preserving the user's periodic-translation control plane in the fork.
+This repository has two roles:
 
-The upstream repository is a synchronization/provenance source only. Translation execution always reads magazine issues from the user's fork after this gate passes.
+1. user-controlled mirror of `hehonghui/awesome-english-ebooks` magazine source files;
+2. the single GitHub control plane for periodic magazine translation.
 
-## Weekly pre-run gate
+Periodic translation must execute from this repository, not directly from upstream and not from `yemoge123/RssReader`.
 
-Before resolving current magazine issues:
+## Upstream boundary
 
-1. Read the fork parent identity and current upstream `master` commit.
-2. Read the current `yemoge123/awesome-english-ebooks:master` commit.
-3. Compare ancestry.
-4. If the fork already contains the upstream commit, continue without writing GitHub.
-5. If the fork is behind/diverged because of target-only control-plane commits, synchronize before source selection.
+- Upstream: `hehonghui/awesome-english-ebooks:master`
+- Execution mirror: `yemoge123/awesome-english-ebooks:master`
+- Upstream is provenance and source-update origin only.
+- Translation execution reads magazine source files and canonical translation-control files from the execution mirror.
 
-## Safe synchronization invariant
+## Fork-only control-plane paths
 
-The fork contains target-only control-plane paths that MUST survive upstream synchronization:
+The following paths are owned by the user's mirror and must survive every upstream synchronization:
 
-- `README.md` control-plane appendix
+- `MIRROR_SYNC_POLICY.md`
 - `PERIODIC_MAGAZINE_TASK.md`
 - `MAGAZINE_TRANSLATION_STRATEGY.md`
 - `MAGAZINE_TRANSLATION_PROFILE.md`
 - `MAGAZINE_WORKFLOW.md`
-- `MIRROR_SYNC_POLICY.md`
 - `authorized-input/magazine_policy.json`
-- `.github/workflows/magazine-repo-reader.yml`
-- `backfill/README.md`
 - `scripts/magazine_epub_extract.py`
 - `scripts/magazine_local_epub_import.py`
 - `scripts/magazine_translation_pipeline.py`
 - `scripts/test_magazine_epub_extract.py`
 - `scripts/test_magazine_local_epub_import.py`
 - `scripts/test_magazine_translation_pipeline.py`
+- `.github/workflows/magazine-repo-reader.yml`
+- `backfill/README.md`
+- the periodic-translation section of `README.md`
 
-Safe sync semantics:
+## Freshness gate
 
-- use the current upstream `master` tree as the source-content base;
-- overlay the current fork versions of the target-only control-plane paths above;
-- for `README.md`, retain the latest upstream README body and the fork's periodic-translation control-plane appendix;
-- create a merge commit whose parents include the current fork head and the upstream head;
-- advance fork `master` by fast-forward to that merge commit;
-- never force-reset fork `master` to upstream and thereby discard the control plane.
+Before each weekly translation run:
 
-## Verification
+1. read current upstream master head;
+2. read current execution-mirror master head;
+3. determine whether the execution mirror already contains the current upstream source state;
+4. if yes, continue;
+5. if the mirror is behind/diverged only because the mirror has fork-only control-plane commits, perform safe synchronization before selecting the current issue;
+6. if safe synchronization cannot be proven, stop with `MIRROR_NOT_FRESH`; do not silently translate directly from upstream.
 
-After sync, verify:
+## Safe synchronization
 
-- the fork contains the upstream head in ancestry;
-- the current required issue directories/files are present in the fork;
-- all target-only control-plane files remain present;
+Never force-reset the mirror to upstream.
+
+Preferred semantic operation:
+
+1. use the current upstream tree as the source-content base;
+2. overlay/preserve every fork-only control-plane path listed above from the current execution mirror;
+3. create a merge commit with:
+   - first parent = current execution-mirror head;
+   - second parent = current upstream head;
+4. fast-forward `yemoge123/awesome-english-ebooks:master` to that merge commit.
+
+If upstream introduces a path that conflicts with a fork-only control-plane path, classify it as a real merge conflict and stop for reconciliation; do not guess.
+
+## Post-sync read-back
+
+After synchronization verify:
+
+- current required magazine issue paths exist in the execution mirror;
 - `authorized-input/magazine_policy.json.source_repo == "yemoge123/awesome-english-ebooks"`;
-- `scripts/magazine_epub_extract.py` reads `SOURCE_REPO = "yemoge123/awesome-english-ebooks"`;
-- RssReader is not referenced as an execution dependency.
-
-Only after this verification may the weekly source freshness/selection gate proceed.
+- `scripts/magazine_epub_extract.py` uses `SOURCE_REPO = "yemoge123/awesome-english-ebooks"`;
+- all canonical control-plane files exist;
+- no periodic translation dependency points to `yemoge123/RssReader`;
+- upstream remains provenance only.
 
 ## Actions boundary
 
-This sync policy does not require GitHub Actions. While the user's current Actions restriction is active, do not dispatch or create scheduled sync workflows. Use the connected GitHub repository operations available to the execution environment.
+The manual magazine workflow is optional maintenance infrastructure, not the weekly scheduler. Do not dispatch it while the user's current GitHub Actions usage restriction remains in force.
 
-## Failure handling
+## Runtime-data boundary
 
-If the mirror cannot be synchronized safely:
+Weekly manifests, translations, QA payloads, checkpoints, EPUB/HTML packages and source payload persistence belong to the current execution workspace and Google Drive according to `MAGAZINE_TRANSLATION_STRATEGY.md`. Do not commit weekly runtime data to Git.
 
-- mark `MIRROR_NOT_FRESH`;
-- do not silently fall back to translating directly from the upstream repository;
-- preserve the weekly recurrence;
-- record the upstream head, fork head, missing issue identity, and exact blocker.
+## Do not repeat
+
+- Do not restore periodic translation assets into RssReader.
+- Do not make personal-ai-context a second canonical copy.
+- Do not translate directly from upstream merely because the mirror is stale.
+- Do not force-reset the mirror and lose fork-only control-plane files.
