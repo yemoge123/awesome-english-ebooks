@@ -18,12 +18,17 @@ This repository is the single GitHub control plane for periodic magazine transla
 
 At the start of every weekly run, read the current `master` versions in this repository:
 
-1. `MAGAZINE_TRANSLATION_STRATEGY.md` — highest authority.
-2. `MAGAZINE_TRANSLATION_PROFILE.md` — fidelity and typography.
-3. `MAGAZINE_WORKFLOW.md` — executable workflow.
-4. `authorized-input/magazine_policy.json` — authorization/source boundary.
+1. `MIRROR_SYNC_POLICY.md` — fork freshness/synchronization gate.
+2. `MAGAZINE_TRANSLATION_STRATEGY.md` — highest translation authority.
+3. `MAGAZINE_TRANSLATION_PROFILE.md` — fidelity and typography.
+4. `MAGAZINE_WORKFLOW.md` — executable workflow.
+5. `authorized-input/magazine_policy.json` — authorization/source boundary.
 
 If any older prompt, Drive handoff, chat history or compatibility pointer conflicts with these files, this repository wins.
+
+## Mirror freshness gate
+
+Before resolving any current issue, execute `MIRROR_SYNC_POLICY.md`. Translation source selection may begin only after the user's fork contains the required upstream source state while preserving the fork-only control plane. Do not silently translate directly from upstream when the mirror is stale.
 
 ## Weekly execution
 
