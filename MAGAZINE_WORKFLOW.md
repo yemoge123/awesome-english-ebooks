@@ -95,23 +95,34 @@ python scripts/magazine_translation_pipeline.py next-batch \
 The next batch is derived from the persisted manifest and QA state, so a new chat/window can resume without replaying completed articles.
 
 
-## Automation-runtime EPUB materialization (primary fresh-run path)
+## Automation-runtime EPUB materialization (preferred fresh-run path)
 
-For the scheduled weekly controller, the primary fresh-run path is the Automation execution workspace.
+For the scheduled weekly controller, the preferred fresh-run path is the Automation execution workspace.
 
 When the authorized mirror exposes the current issue path, byte size and Git blob SHA but the ordinary foreground GitHub connector cannot return the large EPUB binary:
 
-1. materialize the exact EPUB bytes from `yemoge123/awesome-english-ebooks` into the Automation execution workspace using the runtime's available non-Actions transport;
-2. compute actual byte size and canonical Git blob SHA locally;
-3. require exact equality with the mirror metadata;
-4. only then run the existing EPUB extractor/importer and Stage A/B pipeline;
-5. persist the transport receipt with the weekly runtime provenance.
+1. first materialize the exact EPUB bytes from `yemoge123/awesome-english-ebooks` into the Automation execution workspace using the runtime's available runtime-native/non-Actions transport;
+2. if that path is unavailable or fails, and GitHub Actions quota is available, allow one explicit low-frequency `workflow_dispatch` extraction/materialization fallback for the exact required issue(s);
+3. compute actual byte size and canonical Git blob SHA locally;
+4. require exact equality with the mirror metadata;
+5. only then run the existing EPUB extractor/importer and Stage A/B pipeline;
+6. persist the transport receipt with the weekly runtime provenance, including whether Actions fallback was used and the workflow/run identity when applicable.
 
-A foreground-chat inability to download the EPUB must not be promoted to a weekly production blocker. Only an Automation-runtime materialization attempt can produce `RUNTIME_SOURCE_MATERIALIZATION_FAILED`.
+A foreground-chat inability to download the EPUB must not be promoted to a weekly production blocker. `RUNTIME_SOURCE_MATERIALIZATION_FAILED` may be set only after the Automation runtime attempts the preferred materialization path and, when quota is available and appropriate, the permitted manual Actions fallback.
 
 The transport receipt must retain enough evidence to diagnose/reproduce the route without storing credentials: runtime surface, transport class/name, source repository/ref/path, expected+actual size, expected+actual Git blob SHA, verification, post-materialization extractor/importer path, and embedded-image-binary retention status.
 
 Do not ask the user for a manual upload and do not make Drive an online source-staging dependency merely because the foreground chat connector cannot stream the binary.
+
+### GitHub Actions efficiency
+
+Actions is a fallback accelerator, not the default transport. Use it only when the expected value is material.
+
+- Prefer one manual `workflow_dispatch` over repeated or per-publication runs.
+- No scheduled source-extraction Actions.
+- Avoid push/PR triggers for heavy extraction; keep push/PR checks lightweight.
+- Avoid retry loops, redundant artifact builds, and work that can be done deterministically in the Automation workspace/local scripts.
+- Preserve quota for source extraction or release-critical validation that cannot be completed reliably otherwise.
 
 ## Verified local EPUB fallback (non-Actions)
 
