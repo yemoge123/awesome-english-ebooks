@@ -280,6 +280,19 @@ weekly run. Prefer verified local/runtime-native import first. The repository's 
 is an allowed low-frequency manual fallback when Actions quota is available and it materially reduces
 manual work or resolves a real source-materialization blocker.
 
+## 18.5 Google Drive destination identity
+
+Drive delivery targets use **stable folder IDs first** and display names second.
+
+- weekly work root `AI周期检索资料`: `1Uk35QUG4IUxrkHSx_g9xfXOH54g3abZV`
+- weekly container `20_Weekly`: `1kZx08i_9dzxz71iu2TrfujgZx2TkAz1a`
+- final reader archive `China_News_Archive`: `1p8bG3Bq53Md66REL3JotJzIS14SBvlkO`
+- final weekly EPUB destination `02_Chinese_Reader`: `1x8iY_rTXIbd17RfG1FPwKZXeENQkgllv`
+
+Human-facing names may be improved without changing pipeline identity. Automation must resolve by Drive ID when available, must not create a replacement folder merely because a display name changes, and must read back final EPUB metadata to confirm its parent id is exactly `1x8iY_rTXIbd17RfG1FPwKZXeENQkgllv`.
+
+The human navigation document in `China_News_Archive` is `00_START_HERE_最终译刊入口_先看这里` (file id `1K_YFVjCTyvE3383svJVwfaqv5tfvFhkqjNImOYes2Mo`). It is navigation only and is never a state/data authority.
+
 ## 19. Execution / persistence authority boundary
 
 GitHub / `yemoge123/awesome-english-ebooks` owns:
