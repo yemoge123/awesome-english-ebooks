@@ -80,11 +80,12 @@ For fresh weekly execution, large EPUB binary transport belongs to the **automat
 Hard rules:
 
 - A foreground/chat GitHub connector being unable to return large binary bytes is **not** evidence that the production weekly source gate failed.
-- When path / byte size / Git blob SHA are visible but the binary payload is not, the weekly Automation must use its available non-Actions source-materialization path to place the exact mirror bytes into the current execution workspace.
+- When path / byte size / Git blob SHA are visible but the binary payload is not, the weekly Automation should first use its available runtime-native/non-Actions source-materialization path to place the exact mirror bytes into the current execution workspace.
 - The user must not be asked to manually upload the EPUB, and Google Drive must not be introduced as a mandatory pre-extraction staging hop.
 - After materialization, verify `actual_size == expected_size` and `actual_git_blob_sha == expected_git_blob_sha` before extraction. A mismatch is a hard source failure.
-- A true production blocker may be declared only after the **automation execution runtime** itself attempts the authorized materialization path and fails. Use `RUNTIME_SOURCE_MATERIALIZATION_FAILED`; do not infer this state from a foreground chat limitation.
-- Do not use GitHub Actions while the current Actions-usage restriction remains in force.
+- If runtime-native/non-Actions materialization is unavailable or fails, GitHub Actions may be used as a **low-frequency manual fallback** when quota is available, preferably a single explicit `workflow_dispatch` source-extraction run for the exact needed issue(s).
+- A true production blocker may be declared only after the **automation execution runtime** itself attempts the preferred runtime-native path and, when applicable/available, the permitted manual Actions fallback. Use `RUNTIME_SOURCE_MATERIALIZATION_FAILED`; do not infer this state from a foreground chat limitation.
+- GitHub Actions usage must be quota-efficient: no scheduled extraction, no retry loops, no fan-out by publication when one run can cover the required issues, and no low-value push/PR triggers for source extraction.
 
 Every successful materialization must persist a **transport receipt** in current-run provenance and final Drive control/source state. The receipt must include:
 
@@ -134,7 +135,15 @@ Periodic magazine translation is not an RSS/Supabase publishing workflow. RSS/Rs
 
 ## GitHub Actions boundary
 
-The repository may contain a manual source-extraction workflow as an optional maintenance path. It is not the weekly scheduler and must not be invoked while the user's current Actions-usage restriction is in force.
+GitHub Actions is allowed as an **on-demand fallback/maintenance path**, not as the weekly scheduler.
+
+Quota-efficiency rules:
+- prefer runtime-native/non-Actions materialization when it works reliably;
+- use explicit `workflow_dispatch` only when it materially reduces manual work or resolves a real source-materialization blocker;
+- batch the exact required issue(s) into as few runs as practical;
+- do not schedule periodic extraction Actions;
+- avoid low-value push/PR triggers, repeated retries, matrix fan-out, duplicate artifact builds, or validation that can run locally/deterministically;
+- preserve Actions quota for source extraction, release-critical checks, or other high-value jobs that cannot be completed reliably in the current execution runtime.
 
 ## Do not repeat
 
