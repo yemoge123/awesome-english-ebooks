@@ -1,6 +1,4 @@
 import hashlib
-import pytest
-
 from magazine_local_epub_import import git_blob_sha1, validate_local_source
 
 
@@ -24,22 +22,35 @@ def test_validate_local_source_accepts_exact_blob_identity():
     assert actual == sha
 
 
+def _assert_runtime_error(expected_text, fn):
+    try:
+        fn()
+    except RuntimeError as exc:
+        assert expected_text in str(exc), str(exc)
+    else:
+        raise AssertionError(f"expected RuntimeError containing: {expected_text}")
+
+
 def test_validate_local_source_rejects_wrong_blob_sha():
-    with pytest.raises(RuntimeError, match="Git blob SHA mismatch"):
-        validate_local_source(
+    _assert_runtime_error(
+        "Git blob SHA mismatch",
+        lambda: validate_local_source(
             publication="new_yorker",
             source_file="02_new_yorker/2026.09.28/new_yorker.2026.09.28.epub",
             data=b"epub-bytes",
             expected_source_sha="0" * 40,
-        )
+        ),
+    )
 
 
 def test_validate_local_source_rejects_wrong_root():
     data = b"epub-bytes"
-    with pytest.raises(RuntimeError, match="outside authorized root"):
-        validate_local_source(
+    _assert_runtime_error(
+        "outside authorized root",
+        lambda: validate_local_source(
             publication="wired",
             source_file="01_economist/te_2026.09.26/TheEconomist.2026.09.26.epub",
             data=data,
             expected_source_sha=git_blob_sha1(data),
-        )
+        ),
+    )
