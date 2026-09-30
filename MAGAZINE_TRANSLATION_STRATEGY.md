@@ -163,13 +163,13 @@ Do not rely on a three-day GitHub artifact as the only durable copy after public
 
 ### Source-materialization evidence
 
-For scheduled fresh runs, source-byte materialization is an Automation-runtime responsibility. A foreground chat/connector limitation is not a source-freshness or source-availability failure.
+For scheduled fresh runs, source-byte materialization is an Automation-runtime responsibility. A foreground chat/connector limitation is not a source-freshness or source-availability failure. Runtime-native/non-Actions materialization is preferred, but a low-frequency manual GitHub Actions `workflow_dispatch` fallback is allowed when it materially resolves a real blocker and quota is available.
 
 After every successful Automation-runtime materialization, persist a transport receipt alongside provenance with at least: transport class/name, execution surface, mirror repo/ref/path, expected/actual byte size, expected/actual Git blob SHA, verification verdict, extractor/importer path, and embedded-image-binary retention status. Ephemeral signed URLs and credentials must never be persisted.
 
 If the runtime's concrete transport implementation is internal or opaque, persist that limitation explicitly together with the verifiable input/output evidence. This prevents a future run from treating an unexplained transport label as a reproducible implementation.
 
-Only an attempted and failed Automation-runtime materialization may set `RUNTIME_SOURCE_MATERIALIZATION_FAILED`. Do not ask the user to upload the issue merely because the foreground chat connector cannot stream large binary files.
+Only after the Automation runtime attempts the preferred materialization path and, when appropriate/available, the permitted manual Actions fallback may it set `RUNTIME_SOURCE_MATERIALIZATION_FAILED`. Do not ask the user to upload the issue merely because the foreground chat connector cannot stream large binary files.
 
 ## 11. Source freshness gate
 
@@ -276,9 +276,9 @@ the current task workspace.
 
 A persisted Drive checkpoint may be consulted when resuming interrupted work or reusing prior PASS
 translations, terminology, or source payload, but Drive availability is not a prerequisite for a fresh
-weekly run. Use verified local import or current-run authorized source payload when Actions are unavailable.
-The repository's `workflow_dispatch` is an optional manual source-extraction path, subject to the current
-Actions usage restriction.
+weekly run. Prefer verified local/runtime-native import first. The repository's `workflow_dispatch`
+is an allowed low-frequency manual fallback when Actions quota is available and it materially reduces
+manual work or resolves a real source-materialization blocker.
 
 ## 19. Execution / persistence authority boundary
 
@@ -319,10 +319,15 @@ or cross-week reuse materially benefits the run.
 
 ## 20. Actions-efficiency rules
 
-Matching push/PR changes run lightweight tests only.
-Full magazine extraction in the repository workflow runs only on explicit `workflow_dispatch`
-when Actions use is allowed. There is no scheduled extraction.
-There is no RssReader / Android CI coupling. Magazine translation code and source-mirror changes live in `yemoge123/awesome-english-ebooks`.
+GitHub Actions is permitted, but quota is treated as a scarce shared resource.
+
+- Matching push/PR changes run lightweight tests only.
+- Full magazine extraction runs only on explicit `workflow_dispatch`; there is no scheduled extraction.
+- Prefer runtime-native/non-Actions materialization when reliable.
+- Use Actions when it materially reduces manual work, resolves a real binary/source blocker, or provides release-critical validation unavailable elsewhere.
+- Batch exact required issue(s) into as few runs as practical.
+- Avoid low-value triggers, retry loops, per-publication fan-out, duplicate artifacts, and checks that can run locally/deterministically.
+- There is no RssReader / Android CI coupling. Magazine translation code and source-mirror changes live in `yemoge123/awesome-english-ebooks`.
 
 ## 21. Health metrics
 
