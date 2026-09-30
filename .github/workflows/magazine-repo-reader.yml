@@ -1,0 +1,63 @@
+name: Magazine Translation Reader
+
+on:
+  workflow_dispatch:
+    inputs:
+      issues:
+        description: "Optional comma-separated historical issues, e.g. economist=2025-05-03,wired=2026-04-02"
+        required: false
+        type: string
+
+concurrency:
+  group: magazine-translation-reader-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Unit test
+        run: |
+          python scripts/test_magazine_epub_extract.py
+          python scripts/test_magazine_local_epub_import.py
+          python scripts/test_magazine_translation_pipeline.py
+
+      - name: Extract magazine issues
+        env:
+          ISSUE_SPECS: ${{ inputs.issues }}
+        run: |
+          set -eu
+          if [ -n "${ISSUE_SPECS:-}" ]; then
+            args=()
+            IFS=',' read -ra specs <<< "$ISSUE_SPECS"
+            for spec in "${specs[@]}"; do
+              spec="${spec//[[:space:]]/}"
+              [ -n "$spec" ] || continue
+              args+=(--issue "$spec")
+            done
+            python scripts/magazine_epub_extract.py --out magazine-readable "${args[@]}"
+          else
+            python scripts/magazine_epub_extract.py --out magazine-readable
+          fi
+
+      - name: Show manifest
+        run: cat magazine-readable/manifest.json
+
+      - name: Upload readable magazine artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: magazine-readable
+          path: magazine-readable/
+          if-no-files-found: error
+          retention-days: 3

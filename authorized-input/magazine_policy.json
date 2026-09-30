@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "status": "authorized",
+  "scope": "personal_translation_and_processing",
+  "authorized_by": "repository_owner",
+  "source_repo": "yemoge123/awesome-english-ebooks",
+  "allowed_roots": [
+    "01_economist",
+    "02_new_yorker",
+    "04_atlantic",
+    "05_wired"
+  ],
+  "formats": [
+    "epub"
+  ],
+  "declaration": "The repository owner confirms they have the necessary rights to use files covered by this policy for personal translation and processing, and authorizes the automation to treat files in the user's mirror repository as user-authorized input. The upstream repository is provenance only and is not the periodic execution control plane.",
+  "effective_date": "2026-09-30",
+  "mirror_upstream_repo": "hehonghui/awesome-english-ebooks",
+  "repository_role": "authorized_source_mirror_and_translation_control_plane"
+}
