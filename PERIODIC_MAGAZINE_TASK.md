@@ -151,3 +151,18 @@ Quota-efficiency rules:
 - Do not maintain a second canonical copy in `personal-ai-context`; legacy paths there are compatibility pointers only.
 - Do not make the upstream mirror source the normal direct execution dependency.
 - Do not treat Drive as an online source-staging requirement for a fresh weekly run.
+
+
+## Google Drive target identity
+
+Drive persistence uses stable IDs first and human-readable names second.
+
+- weekly work root: `AI周期检索资料`, folder id `1Uk35QUG4IUxrkHSx_g9xfXOH54g3abZV`
+- weekly container: `20_Weekly`, folder id `1kZx08i_9dzxz71iu2TrfujgZx2TkAz1a`
+- final reader archive: `China_News_Archive`, folder id `1p8bG3Bq53Md66REL3JotJzIS14SBvlkO`
+- final weekly EPUB destination: `02_Chinese_Reader`, folder id `1x8iY_rTXIbd17RfG1FPwKZXeENQkgllv`
+- human entry document: `00_START_HERE_最终译刊入口_先看这里`, file id `1K_YFVjCTyvE3383svJVwfaqv5tfvFhkqjNImOYes2Mo`
+
+Automation MUST resolve these destinations by Drive file/folder ID when available. Folder names are human-readable aliases and MUST NOT be used to silently create replacement folders if a display name changes. After publishing the final EPUB, read back metadata and require the parent id to equal `1x8iY_rTXIbd17RfG1FPwKZXeENQkgllv`.
+
+The human entry document is navigation only, never a state or data authority. Do not make the weekly pipeline depend on its prose content.
