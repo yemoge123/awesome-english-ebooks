@@ -206,6 +206,9 @@ def paragraph_role(text, block_index=0):
     if value.startswith("说明：") or value.startswith("说明:"):
         return "note"
     if FRONT_RE.search(value) and len(value) <= 80:
+        segments = [part.strip() for part in re.split(r"[；;]", value) if part.strip()]
+        if len(segments) > 1 and any(not FRONT_RE.search(part) for part in segments[1:]):
+            return "body"
         return "front"
     if block_index < 2 and len(value) <= 40:
         return "front"
