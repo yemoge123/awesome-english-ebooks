@@ -242,3 +242,16 @@ For persistence and final-reader delivery, prefer stable Google Drive IDs over p
 - `02_Chinese_Reader`: `1x8iY_rTXIbd17RfG1FPwKZXeENQkgllv`
 
 Do not create a new folder because a human-facing name changes. Resolve by id, write in place, then verify the final EPUB parent id. The final-reader folder remains the stable delivery target; human navigation documents may be renamed without changing pipeline behavior.
+
+
+## China_News_Archive reader-only boundary
+
+`China_News_Archive` is intentionally a human-facing final-reader archive, not a runtime database.
+
+Allowed children:
+- `00_START_HERE_最终译刊入口_先看这里`
+- `02_Chinese_Reader` (folder id `1x8iY_rTXIbd17RfG1FPwKZXeENQkgllv`)
+
+Do not recreate the retired legacy subfolders `00_Master_Index`, `01_Database`, `03_By_Channel`, `04_Raw_Source`, `05_Derived_Reading`, or `99_Logs`.
+
+Current source authority is the GitHub mirror. Current weekly runtime/control/QA data belongs under `AI周期检索资料/20_Weekly`. Only final EPUB reading releases are published to `02_Chinese_Reader`.
