@@ -9,7 +9,7 @@ runtime authority, and long-term execution behavior.
 Implementation-specific translation fidelity rules remain in `MAGAZINE_TRANSLATION_PROFILE.md`.
 Executable workflow details remain in `MAGAZINE_WORKFLOW.md`.
 
-Repository boundary (2026-09-30): the canonical GitHub control plane and authorized source mirror for this workflow is `yemoge123/awesome-english-ebooks` on `master`. The upstream repository `hehonghui/awesome-english-ebooks` is provenance for the mirror only; periodic translation execution must read source identity, policy, scripts, tests and workflow rules from `yemoge123/awesome-english-ebooks`. `yemoge123/RssReader` is an Android reader project and is not part of periodic magazine translation execution.
+Repository boundary (2026-09-30): the canonical GitHub control plane and authorized source mirror for this workflow is `yemoge123/awesome-english-ebooks` on `master`. Mirror freshness and safe upstream synchronization are governed by `MIRROR_SYNC_POLICY.md` and must pass before weekly source selection. The upstream repository `hehonghui/awesome-english-ebooks` is provenance for the mirror only; periodic translation execution must read source identity, policy, scripts, tests and workflow rules from `yemoge123/awesome-english-ebooks`. `yemoge123/RssReader` is an Android reader project and is not part of periodic magazine translation execution.
 
 ## 1. Fixed publication scope
 
@@ -338,7 +338,8 @@ Track:
 - image mapping from EPUB internal assets
 - Drive as durable persistence / delivery boundary
 - periodic magazine workflow fully decoupled from the RssReader / Android repository
-- historical issue extraction support\n- verified local EPUB ingest with authorized-root and exact Git blob SHA provenance verification
+- historical issue extraction support
+- verified local EPUB ingest with authorized-root and exact Git blob SHA provenance verification
 
 ### Policy adopted but implementation still required
 - explicit P0/P1/P2 two-stage selection machinery
