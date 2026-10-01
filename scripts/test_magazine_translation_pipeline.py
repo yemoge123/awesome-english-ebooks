@@ -112,6 +112,7 @@ def test_pipeline():
         assert page.count("<h1>示例</h1>") == 1
         assert 'class="body"' in page
         assert 'text-indent:2em' in page
+        assert 'line-height:1.64' in page
         assert (mobile / "reader.css").exists()
 
         epub = root / "reader.epub"
@@ -134,6 +135,11 @@ def test_pipeline():
             assert 'class="body"' in chapter
             css = z.read("EPUB/styles/reader.css").decode("utf-8")
             assert "text-indent:2em" in css
+            assert "line-height:1.64" in css
+            assert "padding:0 .3em" in css
+            assert "padding:2rem" not in css
+            assert "line-height:1.86" not in css
+            assert "margin:5%" not in css
 
         release = mod.release_check(workspace, mobile, epub)
         assert release["status"] == "pass"
