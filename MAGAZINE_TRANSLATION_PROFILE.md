@@ -49,9 +49,12 @@ An article may be published only when:
 
 ## Chinese typography
 - Normal Chinese body paragraphs use a first-line indent of two em (`text-indent: 2em`).
+- Canonical EPUB body rhythm is mobile-first: about `line-height: 1.64`, compact paragraph gap about `0.38em`, and minimal horizontal EPUB padding (about `0.3em`).
+- The reader app owns the outer page margin. Do not stack large EPUB padding/margins on top of the reader margin.
 - Front matter such as author/date/category/byline/caption/source/note does not use body indentation.
 - Lists, blockquotes, captions, headings, code/preformatted text, and metadata do not use first-line body indentation.
 - Body paragraph spacing stays compact; do not simulate paragraph separation by inserting extra blank paragraphs.
+- Legacy desktop-oriented values such as `padding: 2rem`, `margin: 5%`, or body `line-height >= 1.8` are release-blocking.
 
 ## Reading output
 - Google Drive remains the archive.
