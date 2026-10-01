@@ -164,6 +164,9 @@ Mobile output requirements:
 - adjustable font size through reader/browser
 - dark-mode friendly
 - no page-width assumptions
+- outer page margin belongs to the reader app; EPUB horizontal padding stays minimal (canonical about `0.3em`)
+- body line-height targets about `1.64`; compact paragraph gap about `0.38em`
+- release checks reject `padding:2rem`, `margin:5%`, and body line-height values around `1.8+`
 - no sentence-level paragraph fragmentation
 - prose paragraphs remain source-paragraph anchored; interviews remain source-turn anchored
 - article-level table of contents
