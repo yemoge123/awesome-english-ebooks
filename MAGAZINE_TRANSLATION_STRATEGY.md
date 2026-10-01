@@ -233,15 +233,19 @@ Google Docs and PDF are not default formal reading outputs.
 
 ## 15. Reading typography
 
-Keep the current mobile-first principles:
+Use the canonical mobile-first reading profile:
 - reflowable single column
 - adjustable font size / reader dark mode
-- compact Chinese prose
-- body first-line indent 2em
+- reader app owns the outer page geometry; EPUB must not impose large fixed page margins
+- EPUB body target: `margin:0`, horizontal padding about `0.3em`, body `line-height:1.64`
+- compact Chinese prose: body first-line indent `2em` with small paragraph gap (about `0.38em`), not large paragraph spacing
 - headings, metadata, lists, quotations, Q&A labels not indented
+- avoid legacy patterns such as `padding:2rem`, `margin:5%`, or body `line-height>=1.8`
 - source-semantic paragraph boundaries
 - deterministic source-image placement only
 - no sentence-level paragraph fragmentation
+
+Release checks must reject legacy typography tokens and require the canonical mobile profile tokens.
 
 ## 16. Rolling package
 
