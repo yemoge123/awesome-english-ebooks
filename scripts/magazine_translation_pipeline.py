@@ -223,22 +223,24 @@ def safe_slug(text):
 CSS = """
 :root{color-scheme:light dark}
 *{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.86;background:#f5f5f7;color:#1d1d1f}
-main{max-width:760px;margin:auto;background:#fff;min-height:100vh;padding:28px 20px 56px}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Noto Serif CJK SC","Source Han Serif SC","Songti SC",serif;font-size:1rem;line-height:1.64;background:#f5f5f7;color:#1d1d1f}
+main{max-width:46rem;margin:auto;background:#fff;min-height:100vh;padding:1.1rem .95rem 2.5rem}
 a{color:inherit}
-h1{font-size:1.75rem;line-height:1.28;margin:.2em 0 .35em}
-h2,h3{line-height:1.38;margin:1.65em 0 .65em}
-.meta{font-size:.88rem;color:#6e6e73;margin-bottom:1.55rem;overflow-wrap:anywhere;word-break:break-word}
-p.body{font-size:1.08rem;text-indent:2em;margin:0 0 .72em}
-p.front,p.caption,p.note,p.li{font-size:1rem;text-indent:0;margin:.35em 0 .65em}
+h1,h2,h3{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif}
+h1{font-size:1.58rem;line-height:1.3;margin:.2em 0 .55em}
+h2,h3{line-height:1.4;margin:1.35em 0 .55em}
+.meta{font-size:.84rem;line-height:1.5;color:#6e6e73;margin-bottom:1rem;overflow-wrap:anywhere;word-break:break-word}
+p.body{font-size:1rem;line-height:inherit;text-indent:2em;margin:0 0 .38em}
+p.front,p.caption,p.note,p.li{font-size:.96rem;line-height:1.55;text-indent:0;margin:.28em 0 .55em}
 p.front,p.caption{color:#666}
-p.note{padding:.8em 1em;background:rgba(128,128,128,.08);border-radius:8px}
-p.li{padding-left:1.2em}
-blockquote{font-size:1.05rem;text-indent:0;border-left:3px solid #aaa;padding-left:1em;margin:1em 0}
+p.note{padding:.65em .8em;background:rgba(128,128,128,.08);border-radius:7px}
+p.li{padding-left:1.1em}
+blockquote{font-size:1rem;line-height:1.62;text-indent:0;border-left:2px solid #aaa;padding-left:.8em;margin:.75em 0}
 pre{white-space:pre-wrap;overflow-wrap:anywhere}
-figure{margin:1.35em 0;break-inside:avoid} img{display:block;max-width:100%;height:auto;margin:auto;border-radius:8px}
-nav a{display:block;padding:.9em 0;border-bottom:1px solid #ddd;text-decoration:none}
-.back{font-size:.9rem;margin-bottom:1.2rem;display:inline-block}
+figure{margin:.95em 0;break-inside:avoid} img{display:block;max-width:100%;height:auto;margin:auto;border-radius:6px}
+nav a{display:block;padding:.65em 0;border-bottom:1px solid #ddd;text-decoration:none}
+.back{font-size:.86rem;margin-bottom:.8rem;display:inline-block}
+@media(max-width:520px){main{padding:.8rem .72rem 2rem}h1{font-size:1.46rem}}
 @media(prefers-color-scheme:dark){body{background:#000;color:#f5f5f7}main{background:#111}.meta,p.front,p.caption{color:#aaa}nav a{border-color:#333}}
 """
 
@@ -413,7 +415,7 @@ def build_epub(workspace, out_file):
 <dc:title>外刊忠实翻译</dc:title><dc:language>zh-CN</dc:language>
 </metadata><manifest>{''.join(manifest_items)}</manifest><spine>{''.join(spine)}</spine></package>"""
 
-    epub_css = """body{font-family:serif;line-height:1.86;margin:5%;}h1{line-height:1.3}h2,h3{line-height:1.38;margin:1.6em 0 .6em}.meta{font-size:.85em;color:#666;margin-bottom:1.4em;overflow-wrap:anywhere}.body{text-indent:2em;margin:0 0 .7em}.front,.caption,.note,.li{text-indent:0}.front,.caption{color:#666}.front,.caption,.li{margin:.3em 0 .6em}.note{margin:.7em 0;padding:.7em .9em;border:1px solid #bbb}.li{padding-left:1em}blockquote{text-indent:0;margin:1em 0;padding-left:1em;border-left:2px solid #999}pre{white-space:pre-wrap}img{display:block;max-width:100%;height:auto;margin:auto}figure{margin:1.2em 0;page-break-inside:avoid}"""
+    epub_css = """html{font-size:100%}body{margin:0;padding:0 .3em;max-width:none;font-family:-apple-system,BlinkMacSystemFont,"Noto Serif CJK SC","Source Han Serif SC","Songti SC",serif;font-size:1em;line-height:1.64;word-break:normal;overflow-wrap:anywhere;widows:2;orphans:2}article{max-width:none;margin:0;padding:0}h1,h2,h3{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif;text-indent:0}h1{font-size:1.52em;line-height:1.32;margin:.35em 0 .72em}h2,h3{line-height:1.4;margin:1.2em 0 .5em}.meta{font-size:.82em;line-height:1.5;margin:0 0 .9em;text-indent:0;opacity:.68;overflow-wrap:anywhere}.body{font-size:1em;line-height:inherit;text-indent:2em;margin:0 0 .38em}.front,.caption,.note,.li{text-indent:0;font-size:.96em;line-height:1.58}.front,.caption{opacity:.72}.front,.caption,.li{margin:.28em 0 .55em}.note{margin:.6em 0;padding:.62em .75em;border:1px solid #aaa}.li{padding-left:1em}blockquote{font-size:1em;line-height:1.62;text-indent:0;margin:.72em 0;padding-left:.8em;border-left:2px solid #999}pre{white-space:pre-wrap;overflow-wrap:anywhere}img{display:block;max-width:100%;height:auto;margin:auto}figure{margin:.9em 0 1em;page-break-inside:avoid;break-inside:avoid}@media(max-width:520px){body{padding:0 .16em}h1{font-size:1.46em}}"""
 
     with zipfile.ZipFile(out_file, "w") as z:
         z.writestr("mimetype", "application/epub+zip", compress_type=zipfile.ZIP_STORED)
@@ -502,6 +504,19 @@ def release_check(workspace, html_dir, epub_file):
                     name for name in names
                     if name.endswith((".xml", ".opf", ".xhtml"))
                 ]
+                css_names = [name for name in names if name.endswith(".css")]
+                if not css_names:
+                    errors.append("EPUB stylesheet missing")
+                else:
+                    css_text = "\n".join(z.read(name).decode("utf-8") for name in css_names)
+                    required_css = ["line-height:1.64", "text-indent:2em", "padding:0 .3em"]
+                    for token in required_css:
+                        if token not in css_text:
+                            errors.append(f"EPUB mobile typography token missing: {token}")
+                    forbidden_css = ["padding:2rem", "line-height:1.86", "line-height:1.9", "margin:5%"]
+                    for token in forbidden_css:
+                        if token in css_text:
+                            errors.append(f"EPUB legacy typography token present: {token}")
                 for name in parse_targets:
                     try:
                         root = ET.fromstring(z.read(name))
