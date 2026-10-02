@@ -169,7 +169,8 @@ Mobile output requirements:
 - release checks reject `padding:2rem`, `margin:5%`, and body line-height values around `1.8+`
 - no sentence-level paragraph fragmentation
 - prose paragraphs remain source-paragraph anchored; interviews remain source-turn anchored
-- article-level table of contents
+- article-level table of contents uses Simplified Chinese translated titles
+- visible article heading uses the Chinese translated title; preserve the original English title separately in metadata/subtitle form
 - embedded article images only when source mapping is explicit
 - periodic runs do not create Google Docs
 
