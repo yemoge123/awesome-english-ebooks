@@ -16,6 +16,9 @@ Canonical rules for personal magazine translation runs.
 - Preserve block IDs unchanged.
 
 ## Naming
+- Every selected article must have a Simplified Chinese `translated_title`; an unchanged English source title is not an acceptable translated title.
+- EPUB/HTML tables of contents and visible article headings use the Chinese translated title.
+- Preserve the original English title separately in article metadata/subtitle form for source checking and search.
 - Keep widely used company/product names in their common Latin form when that is clearer: OpenAI, Nvidia, AMD, WIRED.
 - For personal names, preserve the original Latin name when a Chinese rendering is uncertain.
 - Never invent a Chinese name.
