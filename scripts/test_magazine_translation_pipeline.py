@@ -76,6 +76,7 @@ def test_pipeline():
         assert batch["article_count"] == 1
         assert batch["block_count"] == 2
         assert batch["tasks"][0]["task_id"] == task["task_id"]
+        assert batch["output_contract"]["translated_title"].startswith("required Simplified Chinese article title")
 
         translation = {
             "translated_title": "示例",
