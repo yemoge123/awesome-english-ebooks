@@ -101,6 +101,12 @@ def validate_one(task):
         return {"task_id": task["task_id"], "status": "pending", "errors": [], "warnings": []}
 
     translated = load_json(translation_path)
+    translated_title = str(translated.get("translated_title", "")).strip()
+    source_title = str(task.get("title", "")).strip()
+    if not translated_title:
+        errors.append("missing translated_title")
+    elif translated_title == source_title and re.search(r"[A-Za-z]", source_title) and not re.search(r"[\u3400-\u9fff]", source_title):
+        errors.append("translated_title is unchanged from English source title")
     src_blocks = source.get("blocks", [])
     dst_blocks = translated.get("blocks", [])
     src_ids = ids(src_blocks)
@@ -185,6 +191,11 @@ def next_batch(workspace, max_articles=4, max_blocks=120, out_file=None):
     batch = {
         "schema_version": 1,
         "translation_profile": manifest.get("translation_profile"),
+        "output_contract": {
+            "translated_title": "required Simplified Chinese article title; do not copy an English source title unchanged",
+            "original_title": "preserved from task.title and retained separately in reader metadata",
+            "blocks": "exactly one translated block per source block id, in source order",
+        },
         "article_count": len(selected),
         "block_count": used_blocks,
         "tasks": selected,
@@ -260,7 +271,7 @@ def build_mobile(workspace, out_dir):
         if status_by_id.get(task["task_id"]) not in {"pass", "review"}:
             continue
         tr = load_json(task["translation_file"])
-        title = tr.get("translated_title") or task["title"]
+        title = str(tr["translated_title"]).strip()
         slug = safe_slug(task["task_id"] + "-" + title) + ".html"
         body = []
         for block_index, block in enumerate(tr.get("blocks", [])):
