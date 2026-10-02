@@ -226,7 +226,8 @@ Do not create four separate publication EPUBs or four separate publication HTML 
 
 EPUB internal organization:
 - publication-level sections
-- article-level table of contents
+- article-level table of contents uses Simplified Chinese translated article titles
+- visible article headings use the same Chinese translated title; retain the original English title separately as metadata/subtitle for traceability
 - omit empty publication sections while the reading index still records scan/selected counts
 
 Google Docs and PDF are not default formal reading outputs.
