@@ -236,6 +236,21 @@ Google Drive is the canonical authority for translation runtime data: GT batch m
 Do not commit GT-xxx runtime payloads back into Git. For reproducibility, each Drive batch should retain the relevant repository HEAD or code/profile blob/commit SHA together with source EPUB path/SHA identity.
 
 
+## Drive current-route resolution
+
+The human-facing Google Drive hierarchy may be reorganized for consolidation. Do not infer the magazine Current state from an old path string or from global Drive search results.
+
+Before any resume/persistence operation, resolve Drive in this order:
+
+1. read the current navigation entry `AI周期检索资料/00_INDEX/00_CURRENT_HOME_周期检索与外刊入口` (stable file id `1Rqor7JmHg6AOtTNqk8CmryNZK54dGv2wtz-NfOiXOsA`);
+2. resolve the stable weekly container id `1kZx08i_9dzxz71iu2TrfujgZx2TkAz1a` and inspect its current children rather than assuming a fixed year/name layer;
+3. for an interrupted magazine week, identify the canonical week workspace by valid `CURRENT_*` checkpoint identity and parent chain. An already-valid in-progress workspace keeps its folder identity even if surrounding human-facing directories were reorganized;
+4. do not create a replacement week folder merely because display paths changed;
+5. when the week is closed, keep the formal week root compact: `00_阅读索引`, the combined EPUB, the combined HTML ZIP, and `90_历史归档/`. Runtime/control/source/translation/QA/package evidence belongs to the recovery/audit side of that week rather than remaining as competing top-level reading artifacts;
+6. final consumption copy remains `China_News_Archive/02_Chinese_Reader` (folder id `1x8iY_rTXIbd17RfG1FPwKZXeENQkgllv`).
+
+Current Drive organization is authoritative for routing; GitHub remains authoritative for executable workflow rules. Directory layout for Weekly Research and magazine runtime must not be conflated.
+
 ## Google Drive target identity
 
 For persistence and final-reader delivery, prefer stable Google Drive IDs over path-name lookup.
