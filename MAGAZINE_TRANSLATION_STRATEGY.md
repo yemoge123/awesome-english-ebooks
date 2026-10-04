@@ -285,6 +285,14 @@ weekly run. Prefer verified local/runtime-native import first. The repository's 
 is an allowed low-frequency manual fallback when Actions quota is available and it materially reduces
 manual work or resolves a real source-materialization blocker.
 
+## 18.4 Drive route discovery after human reorganization
+
+Drive path names are not a stable execution interface. Human-facing folders may be regrouped to reduce search and navigation cost.
+
+For magazine production/resume, first read the current Drive navigation entry `00_CURRENT_HOME_周期检索与外刊入口` (file id `1Rqor7JmHg6AOtTNqk8CmryNZK54dGv2wtz-NfOiXOsA`), then resolve the weekly container by stable id and inspect the current hierarchy. Do not assume `20_Weekly/2026/...` is always the live Current route, and do not infer Current from global Drive search results.
+
+An existing in-progress week that still has a valid canonical `CURRENT_WEEKLY_MANIFEST` / queue / QA checkpoint retains its workspace identity through a surrounding directory reorganization. Do not migrate or duplicate it mid-run solely to match a newer human-facing layout. At formal closure, normalize the week root to the package shape defined above and move superseded/process evidence to `90_历史归档/` as appropriate.
+
 ## 18.5 Google Drive destination identity
 
 Drive delivery targets use **stable folder IDs first** and display names second.
