@@ -248,6 +248,23 @@ For persistence and final-reader delivery, prefer stable Google Drive IDs over p
 Do not create a new folder because a human-facing name changes. Resolve by id, write in place, then verify the final EPUB parent id. The final-reader folder remains the stable delivery target; human navigation documents may be renamed without changing pipeline behavior.
 
 
+## Drive raw checkpoint update transport
+
+Canonical runtime JSON files such as `CURRENT_WEEKLY_MANIFEST.json`, `CURRENT_TRANSLATION_QUEUE.json`, `CURRENT_QA_STATE.json`, and other stable `CURRENT_*` checkpoints MUST be updated in place so their Drive file IDs remain stable.
+
+For non-native/raw Drive files in the automation runtime, the verified write path is:
+
+1. generate the replacement JSON as a local execution-workspace file;
+2. call the Drive raw-file update action on the existing canonical file ID, passing that local workspace path as the top-level `file_uri` input so the runtime can rewrite it into the connector-native file reference;
+3. keep MIME type `application/json` for JSON checkpoints;
+4. raw-read the same canonical Drive file back after the update;
+5. compare the read-back bytes (preferably SHA-256 plus byte size) and semantic checkpoint fields with the intended local file before consuming the next translation batch.
+
+Do not pass a plain file-service ID, signed URL, or manually constructed connector-reference object as a substitute for the runtime top-level file rewrite. Connector layers may expose incompatible outer/inner schemas for those forms.
+
+Do not create `__CANDIDATE_CURRENT_*`, sidecar manifests, or duplicate `CURRENT_*` files as a normal fallback. A temporary raw transport object is allowed only to diagnose connector behavior and MUST be removed after successful canonical write/read-back. If true in-place update is unavailable, leave the weekly state `IN_PROGRESS`, preserve the exact recovery package/next-batch pointer, and stop before translating another batch rather than creating competing canonical state.
+
+
 ## China_News_Archive reader-only boundary
 
 `China_News_Archive` is intentionally a human-facing final-reader archive, not a runtime database.
