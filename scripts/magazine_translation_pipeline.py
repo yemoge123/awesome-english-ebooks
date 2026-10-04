@@ -221,7 +221,11 @@ def paragraph_role(text, block_index=0):
         if len(segments) > 1 and any(not FRONT_RE.search(part) for part in segments[1:]):
             return "body"
         return "front"
-    if block_index < 2 and len(value) <= 40:
+    # Short prose immediately after a title is still body text unless it was
+    # positively identified as front matter above.  The previous positional
+    # fallback misclassified the first short paragraph of an article as
+    # metadata and suppressed the canonical body indentation.
+    if block_index == 0 and len(value) <= 40:
         return "front"
     return "body"
 
