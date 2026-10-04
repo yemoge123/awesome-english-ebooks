@@ -111,6 +111,19 @@ Apply the rules in `MAGAZINE_TRANSLATION_STRATEGY.md`:
 - selected-article loss must remain zero;
 - no artificial weekly article quota is allowed.
 
+## Resumable continuation worker
+
+A weekly run is a durable state machine, not a single scheduler invocation.
+
+- The Sunday fresh-run controller performs source freshness/materialization and Stage A/B only when the current ISO week has no valid canonical checkpoint.
+- If the current ISO week already has a valid `IN_PROGRESS` checkpoint, later invocations MUST resume the same selected set and source identities from Drive `CURRENT_*` state; they MUST NOT restart source selection or silently drop queued articles.
+- After every translation batch, persist the completed translation payloads plus updated queue/QA/weekly manifest in place before taking the next batch.
+- The default ~4 articles / 120 blocks is only a batch size. Reaching one batch boundary is not a reason to stop the weekly workflow.
+- A scheduler-level continuation worker MAY invoke the same weekly state machine multiple times on Sunday. It must remain silent when no work is needed, must not create duplicate weekly folders, and must not retranslate exact PASS/reuse bodies.
+- A valid persisted `SELECTED_SOURCE_PAYLOAD` for the same publication + issue + source SHA/body fingerprint MAY be used for continuation. This is resume state, not a fresh-run Drive staging dependency.
+- When execution time ends before completion, leave `delivery_state=IN_PROGRESS`, persist the exact remaining queue/next-batch state, and allow the next continuation invocation to resume without user interaction.
+- `WEEKLY_COMPLETE` remains gated by selected all PASS/PUBLISHED, remaining=0, package/release checks, and Drive read-back.
+
 ## Output
 
 Each weekly translation run produces one combined reading package:
