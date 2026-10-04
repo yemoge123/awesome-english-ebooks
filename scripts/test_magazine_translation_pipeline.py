@@ -96,6 +96,7 @@ def test_pipeline():
         assert mod.paragraph_role("摄影：某某；编辑：某某", 6) == "front"
         assert mod.paragraph_role("摄影：某某；随后正文开始并继续很长很长很长很长很长很长很长很长很长很长很长很长很长很长。", 6) == "body"
         assert mod.paragraph_role("这是普通中文正文段落。", 6) == "body"
+        assert mod.paragraph_role("这是第一段短正文。", 0) == "body"
         refreshed = mod.load_json(workspace / "translation_manifest.json")
         assert refreshed["tasks"][0]["status"] == "pass"
         assert mod.next_batch(workspace)["article_count"] == 0
