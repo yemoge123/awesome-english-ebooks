@@ -25,7 +25,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          filter: blob:none
+          # Only executable inputs are needed in checkout. Magazine EPUBs
+          # are fetched by the extractor from the authorized mirror.
+          sparse-checkout: |
+            scripts
+            authorized-input
+            .github/manual-triggers
           fetch-depth: 1
 
       - name: Set up Python
