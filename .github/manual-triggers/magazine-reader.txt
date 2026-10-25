@@ -1,1 +1,0 @@
-economist=2026-10-10,new_yorker=2026-10-12
